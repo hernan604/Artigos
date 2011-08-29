@@ -110,6 +110,10 @@ Você deverá ver o arquivo ModuloXYZ-0.01.tar.gz gerado. Este é o arquivo que 
 
 O arquivo MANIFEST deve conter uma lista de arquivos que serão incluídos automaticamente quando você executar um 'make dist'. 
 
+Uma maneira simples de incluir os arquivos no MANIFEST é executar um
+
+    make manifest
+
 =head2 COMO PUBLICAR SEU MÓDULO NO CPAN
 
 Agora que você gerou seu modulo-0.01.tar.gz , você já pode enviar o mesmo ao PAUSE. Consequentemente o PAUSE irá agendar a publicação de seu módulo no CPAN.
