@@ -7,7 +7,9 @@
 =head2 RESUMO:
 
 Este artigo tem por ensinar a você como preparar um servidor web perl utilizando nginx, varnish, mysql, postgres, e framework perl catalyst.
+
 Varnish é um acelerador HTTP projetado para sites de conteúdo dinâmicos com grandes volumes de acesso. Varnish foi desenvolvido por tablóide norueguês Verdens Gang. E seu arquiteto inicial foi Poul Henning Kamp, também desenvovedor freebsd.
+
 Aviso desde já que o varnish limita o cache em 2GB para máquinas 32bit... portanto, recomendo a utilização de uma máquina 64bits.
 
 Primeiro passo, instale o ubuntu na sua máquina virtual antes de iniciar os procedimentos a seguir.
@@ -15,18 +17,22 @@ Primeiro passo, instale o ubuntu na sua máquina virtual antes de iniciar os pro
 =head2 COMO INSTALAR PERL NO UBUNTU
 
 Por default o ubuntu sempre trouxe o perl já instalado em suas distros.
+
 Verifique se sua distro já possúi o perl instalado. Para verificar, digite:
 
     perl -v
 
 Se aparecer a versão do perl, quer dizer que ele está instalado. 
+
 Se não tiver instalado, digite o comando: 
 
     sudo apt-get install perl
     perl -v
 
 Agora sim, podemos prosseguir.
+
 Recomendo que você faça o seguinte procedimento para instalar módulos perl sem root.
+
 Existe mais de uma opção para instalar módulos perl.. você pode utilizar root e instalar no perl do seu sistema, ou você pode usar a combinação de "perlbrew e cpanm" que permite a instalação de módulos perl sem a necessidade do usuário root... o que na minha opinião é muito melhor e mais seguro. Siga os passos a seguir para instalar o perlbrew ( software que instala o perl no seu /home/seuuser ) e o cpanm ( baixa, descomprime compila e instala módulos perl com mais facilidade ). A combinação de perlbrew e cpanm é excelente para instalar os módulos que cada usuário precisa sem a necessidade de root.
 
 =head2 INSTALAÇÃO DO PERLBREW E CPANM
@@ -48,6 +54,7 @@ Existe mais de uma opção para instalar módulos perl.. você pode utilizar roo
     sudo apt-get install nginx varnish postgresql mysql-server mysql-client sqlite
 
 digite uma senha para seu mysql.. vou digitar msyql123
+
 e depois instale o módulo perl Task::Catalyst ( que instala todos os módulos necessários para iniciar uma app catalyst )
 
     cpanm Task::Catalyst
@@ -179,6 +186,7 @@ Vamos criar uma aplicação básica para testar nossa aplicação
     cd ~/sites/App-Example
 
 E vamos criar dois métodos para permitir acesso a uma página com cache  e outra sem cahe
+
 Edite o Controller Root 
 
     vim lib/App/Example/Controller/Root.pm
@@ -217,9 +225,13 @@ Agora acesse as páginas que você criou em:
 e você deve ver o conteúdo das mesmas.
 
 O pid da sua app será apresentado na tela através de uma mensagem: 
+
 FastCGI daemon started (pid XXXXX), mas ele tambem vai estar gravado em ~/sites/App-Example/srcipt/pid.pid
+
 Então para verificar se o varnish está trabalhando, vamos matar a applicação catalyst e ver o que acontece.
+
 Faça um cat ~/sites/App-Example/script/pid.pid e de um kill no pid da sua app.
+
 Agora acesse as mesmas páginas, e veja o que aconteceu
 
     http://127.0.0.1                      #vai estar fora do ar
@@ -227,6 +239,7 @@ Agora acesse as mesmas páginas, e veja o que aconteceu
     http://127.0.0.1/page-com-cache       #vai carregar diretamente do cache
 
 Percebeu que a page-com-cache continua no ar porém as oturas estão fora do ar ?
+
 Então, isso quer dizer que deu tudo certo !
 
 =head2 CONCLUSÃO

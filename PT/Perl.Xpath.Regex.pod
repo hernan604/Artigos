@@ -12,7 +12,9 @@ Este artigo tem como objetivo proporcionar um exemplo prático que envolva:
     - Exportar dados do site em arquivo formato ODF ( openoffice spreadsheets ).
 
 Para começar será escolhido um site como ponto de partida. Acesse a url escolhida para nosso artigo:
+
 http://www.portaltransparencia.gov.br/despesasdiarias/resultado?consulta=rapida&periodoInicio=01%2F01%2F2011&periodoFim=31%2F01%2F2011&fase=EMP&codigoOS=51000&codigoFavorecido=
+
 Obs: para obter esta url, acessei o site http://www.portaltransparencia.gov.br/despesasdiarias e selecionei o período de 01/01/2011 a 31/01/2011, Empenho, Ministério do esporte > consultar.
 
 [% printscreen da url acima.. ressaltando o resultado da consulta. %]
@@ -28,6 +30,7 @@ Como podemos perceber, nossa página tem paginação, e tem os dados formatados 
 =head2 Obtendo os dados de uma página
 
 Para acessar estes dados utilizarei XPath, que é uma sintaxe utilizada para navegar entre atributos e elementos em um documento xml. 
+
 XPath está presente e é utilizado nas mais diversas linguagens de programação. Sua sintaxe é similar a: "//html/body/div/span" que retornaria o valor do texto que está dentro do span.
 
 Exemplos de notação XPath:
@@ -46,7 +49,9 @@ Exemplos de notação XPath:
 
 
 Agora que entendemos o básico sobre XPath, vamos continuar e aplicar este aprendizado no site que escolhemos anteriormente.
+
 O objetivo vai ser carregar os dados da página dentro de uma estrutura de dados criada especificamente para este site.
+
 Veja a ilustração do que deve ser feito conforme a imagem:
 
 =begin pod:xhtml
@@ -55,9 +60,10 @@ Veja a ilustração do que deve ser feito conforme a imagem:
 
 =end pod:xhtml
 
-=regex2 Analisando texto com regex
+=head2 Analisando texto com regex
 
 Depois que obtivermos os dados, os dados serão parseados e será feita uma re-formatação em alguns dos dados obtidos. O objetivo desta reformatação é adaptar os dados obtidos aos formatos necessários por nós. Para isto vamos utilizar Expressões regulares com o objetivo de analisar todo o conteúdo obtido e transformá-lo de acordo com o que precisamos.
+
 Obs. isto pode ser feito já na hora da leitura dos dados.
 
 Veja um exemplo de regex:
