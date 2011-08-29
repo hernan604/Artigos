@@ -152,10 +152,13 @@ Existem diversas maneiras para instalar módulos do cpan. Vou apresentar uma man
 
 =head2 COMO CRIAR TESTES PARA SEU MÓDULO PERL
 
-  Todos os módulos devem ser testados para garantir a funcionalidade dos mesmos.
-  Os testes da sua app ficam dentro da pasta Modulo/t/001-testes.t
-  Crie os testes de acordo com sua necessidade. Quanto mais testes melhor.
-  Acesse via cpan: Test::Tutorial e obtenha mais exemplos de como testar sua aplicação.
+Todos os módulos devem ser testados para garantir a funcionalidade dos mesmos.
+
+Os testes da sua app ficam dentro da pasta Modulo/t/001-testes.t
+
+Crie os testes de acordo com sua necessidade. Quanto mais testes melhor.
+
+Acesse via cpan: Test::Tutorial e obtenha mais exemplos de como testar sua aplicação.
 
 Ex de teste:
 
@@ -172,32 +175,45 @@ Ex de teste:
     done_testing;
 
 ao final coloque done_testing;
+
 para executar os testes da sua aplicação execute:
 
     cd modulo-xyz
     perl Makefile.PL
     make test
 
-E se tudo deu certo, você verá a mensagem: Results: PASS
+E se tudo deu certo, você verá a mensagem: 
+    
+    Results: PASS
 
 =head2 ALTERANDO A DOCUMENTACAO DO MÓDULO PERL
 
 Edite o arquivo principal do seu módulo e documente tudo que for preciso.
+
 Se você ficar em dúvida, baixe outros módulos do cpan criados por outras pessoas e veja como elas fazem.
+
 A parte que você deve alterar para criar documentação é a parte que está após os =head*
 
 =head2 CONCLUSÃO
 
 Criar módulos perl é uma tarefa que envolve vários detalhes, mas é bastante tranquilo de fazer.
+
 O ecosistema perl permite que trabalhemos bem a questão de testes e de documentação para garantir a qualidade do software produzido.
+
 O CPAN tem tudo!!, é um lego de várias peças que permite a você montar aplicações sem limites.
+
 Aproveite, contribua, aprenda com os outros.
+
 E lembre-se, o povo está de olho na qualidade... então é recomendável manter um alto padrão :)
 
 =head2 AUTOR
 
 Hernan Lopes < hernanlopes at gmail >
+
 cpan: http://search.cpan.org/~hernan/
+
 github:  http://github.com/hernan604/
+
 Repasse este conhecimento e ajude a fortalecer linguagem perl no brasil.
+
 
