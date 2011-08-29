@@ -236,7 +236,10 @@ VocÃª acaba de criar um servidor web simples com nginx, varnish para uma aplicaÃ
 =head2 Autor
 
 Hernan Lopes < hernanlopes at gmail >
+
 cpan: http://search.cpan.org/~hernan/
+
 github:  http://github.com/hernan604/
+
 Repasse este conhecimento e ajude a fortalecer linguagem perl no brasil.
 
