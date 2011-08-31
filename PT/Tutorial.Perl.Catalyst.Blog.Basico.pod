@@ -14,15 +14,15 @@ Vou demonstrar como criar um "blog/crud" simples com catalyst.
 
 Para iniciar nosso projeto, digite:
 
-    catalyst.pl Blog::Tutorial
-    cd Blog-Tutorial
+    $ catalyst.pl Blog::Tutorial
+    $ cd Blog-Tutorial
 
 Ok, agora temos nosso esqueleto de aplicação 
 
 Agora é o seguinte, vamos deixar 2 terminais abertos para trabalhar neste tutorial... um deles é onde vamos trabalhar com o código fonte e o outro vamos deixar rodando o servidor web com nossa aplicação. Então abra outro terminal e digite:
 
-    cd Blog-Tutorial
-    script/blog_tutorial_server.pl -r -d -p 3005
+    $ cd Blog-Tutorial
+    $ script/blog_tutorial_server.pl -r -d -p 3005
 
 isto vai inicializar o servidor web na porta 3005, para acessar e ver se está correto, abra seu firefox e aponte para http://localhost:3005
 
@@ -30,7 +30,7 @@ O parâmetro -r recarrega automaticamente seu servidor web-dev toda vez que um c
 
 Então vamos começar alterando o controller Root para tirar aquela tela de boas vindas.
 
-    vim lib/Blog/Tutorial/Controller/Root.pm
+    $ vim lib/Blog/Tutorial/Controller/Root.pm
 
 altere o método index para:
 
@@ -43,12 +43,12 @@ e acesse a página index novamente: http://localhost:3005
 
 Agora vamos criar os templates para poder apresentar nossa página em html:
 
-    cd Blog-Tutorial
-    mkdir -p root/src/template/standard
+    $ cd Blog-Tutorial
+    $ mkdir -p root/src/template/standard
 
 e vamos criar um wrapper, o wrapper será o arquivo central de nosso template 'standard'. É atraves do wrapper que o conteúdo de seu site será apresentado.
 
-    vim root/src/template/standard/wrapper.tt2
+    $ vim root/src/template/standard/wrapper.tt2
 
 e insira o conteúdo
 
@@ -70,7 +70,7 @@ Vamos prosseguir para exemplificar...
 
 Primeiro precisamos criar uma View chamada 'Standard' para poder implementar templates.. então vamos criar o arquivo para nossa view:
 
-    vim lib/Blog/Tutorial/View/Standard.pm
+    $ vim lib/Blog/Tutorial/View/Standard.pm
 
 e inserir o seguinte conteúdo:
 
@@ -91,7 +91,7 @@ e inserir o seguinte conteúdo:
 
 agora  vamos criar o template inicial para nossa página index:
 
-    vim root/src/template/standard/index.tt2
+    $ vim root/src/template/standard/index.tt2
 
 e insira o conteúdo:
 
@@ -102,7 +102,7 @@ e insira o conteúdo:
 
 agora, altere e indique qual template o método index no controller Root deverá utilizar... 
 
-    vim lib/Blog/Tutorial/Controller/Root.pm
+    $ vim lib/Blog/Tutorial/Controller/Root.pm
 
 e altere o método index
 
@@ -121,9 +121,9 @@ ok, você pode notar que especificou no método index qual 'view' deve ser utili
 
 agora, vamos criar um controller chamado ControlPanel::Post que vai permitir a criação de posts para nosso blog.
 
-    cd Blog-Tutorial
-    script/blog_tutorial_create.pl controller ControlPanel::Post #o catalyst irá criar o esqueleto do controller para nos
-    vim lib/Blog/Tutorial/Controller/ControlPanel/Post.pm
+    $ cd Blog-Tutorial
+    $ script/blog_tutorial_create.pl controller ControlPanel::Post #o catalyst irá criar o esqueleto do controller para nos
+    $ vim lib/Blog/Tutorial/Controller/ControlPanel/Post.pm
 
 =head2 CRIANDO FORMULÁRIO COM FORMHANDLER
 
@@ -203,7 +203,7 @@ agora altere o método index do controller Post para:
 
 e crie o template post_index.tt2 para esta página
 
-    vim root/src/template/standard/post_index.tt2
+    $ vim root/src/template/standard/post_index.tt2
 
 com o seguinte conteúdo:
 
@@ -259,7 +259,7 @@ ok, entendi, mas e como eu acesso o valor dessas variáveis no controller?
 todas as variáveis de um request são acessíveis através do $c->req->params (veja mais em http://search.cpan.org/~bobtfish/Catalyst-Runtime-5.90002/lib/Catalyst/Request.pm#$req-%3Eparams )
 Então nós podemos alterar nosso método 'index' do controller 'post' para entender um pouco melhor isso... então, altere seu controller e insira umas linhas de debug para ver o que acontece conforme:
 
-    vim lib/Blog/Tutorial/Controller/ControlPanel/Post.pm
+    $ vim lib/Blog/Tutorial/Controller/ControlPanel/Post.pm
 
 e modifique o método index
 
@@ -378,7 +378,7 @@ Você tambem aprendeu a fazer IF no seu template... para saber mais sobre o temp
 
 Agora, vamos colocar um 'header'(cabeçalho) para nossa app
 
-    vim root/src/template/standard/header.tt2
+    $ vim root/src/template/standard/header.tt2
 
 e colocar o conteúdo:
 
@@ -392,7 +392,7 @@ e colocar o conteúdo:
 
 e vamos inserir este header em nosso wrapper para que ele seja processado e inserido em todas as páginas:
 
-    vim root/src/template/standard/wrapper.tt2
+    $ vim root/src/template/standard/wrapper.tt2
 
 e inserir uma linha antes do [% content %], obtendo:
 
@@ -405,7 +405,7 @@ agora acesse sua página inicial em http://localhost:3005/ e veja o cabeçalho d
 
 agora altere o conteúdo completo da sua página index, para criar um link que vai até a página de posts:
 
-    vim root/src/template/standard/index.tt2
+    $ vim root/src/template/standard/index.tt2
 
 substitua o conteúdo por:
 
@@ -487,19 +487,19 @@ e vamos criar alguns usuários
 
 e agora vamos criar nossos models para nossa app.. vamos utilizar o dbic dump ( mais info DBIx::Class::Schema::Loader )
 
-    cd Blog-Tutorial
+    $ cd Blog-Tutorial
 
 se você usa postgres com usuario MEU_USER.. substitua pelo seu username
 
-    script/blog_tutorial_create.pl model DB DBIC::Schema Blog::Tutorial::DB create=static dbi:Pg:dbname=blog_tutorial MEU_USER passworrrddzz
+    $ script/blog_tutorial_create.pl model DB DBIC::Schema Blog::Tutorial::DB create=static dbi:Pg:dbname=blog_tutorial MEU_USER passworrrddzz
 
 se você usa mysql com usuario MEU_USER.. substitua pelo seu username
 
-    script/blog_tutorial_create.pl model DB DBIC::Schema Blog::Tutorial::DB create=static dbi:mysql:db=blog_tutorial MEU_USER passworrrddzz
+    $ script/blog_tutorial_create.pl model DB DBIC::Schema Blog::Tutorial::DB create=static dbi:mysql:db=blog_tutorial MEU_USER passworrrddzz
   
 e agora vamos fixar os relacionamentos.... edite seus models e altere conforme:
 
-    vim lib/Blog/Tutorial/DB/Result/User.pm 
+    $ vim lib/Blog/Tutorial/DB/Result/User.pm 
 
 e altere as ultimas linhas para ficar:
 
@@ -526,7 +526,7 @@ e altere as ultimas linhas para ficar:
 
 agora edite o model Roles:
 
-    vim lib/Blog/Tutorial/DB/Result/Role.pm
+    $ vim lib/Blog/Tutorial/DB/Result/Role.pm
 
 e altere as últimas linhas para obter:
 
@@ -545,7 +545,7 @@ e altere as últimas linhas para obter:
 
 e edite o model UsersToRole
 
-    vim lib/Blog/Tutorial/DB/Result/UsersToRole.pm
+    $ vim lib/Blog/Tutorial/DB/Result/UsersToRole.pm
 
 e altere as últimas linhas para obter:
 
@@ -591,7 +591,7 @@ Agora o próximo passo é criar umas telas/templates para login e os controllers
 
 então vamos lá, crie um template para a tela de login:
 
-    vim root/src/template/standard/login.tt2
+    $ vim root/src/template/standard/login.tt2
 
 e adicione o conteúdo:
 
@@ -601,11 +601,11 @@ e adicione o conteúdo:
 
 agora crie o controller para autenticação
 
-    script/blog_tutorial_create.pl controller Authenticate
+    $ script/blog_tutorial_create.pl controller Authenticate
 
 e edite o controller 
 
-    vim lib/Blog/Tutorial/Controller/Authenticate.pm
+    $ vim lib/Blog/Tutorial/Controller/Authenticate.pm
 
 Altere o conteúdo desse controller pelo conteúdo abaixo... na verdade apenas removi o método index e adicione dois novos métodos: 'login' e 'logout'... ficando com um arquivo assim:
 
@@ -723,7 +723,7 @@ Altere o conteúdo desse controller pelo conteúdo abaixo... na verdade apenas r
 
 e acesse http://localhost:3005/login para ver se já aparece a tela de login... mas ela ainda não vai estar autenticando... antes precisamos alterar alguns arquivos na configuração do arquivo central de nossa app catalyst.. para tal edite o lib/Blog/Tutorial.pm
 
-    vim lib/Blog/Tutorial.pm
+    $ vim lib/Blog/Tutorial.pm
 
 e modifique seu 'use Catalyst qw/.../' obtendo:
 
@@ -756,7 +756,7 @@ e tambem coloque nesse mesmo arquivo a configuração do plugin de autenticaçã
 
 e agora altere o método auto do seu Root controller... o método auto é executado sempre antes dos métodos do controller.. então, vamos colocar a validação da autenticação dentro desse método
 
-    vim lib/Blog/Tutorial/Controller/Root.pm
+    $ vim lib/Blog/Tutorial/Controller/Root.pm
 
 e insira o método 'auto' que provavelmente não estará lá por padrão (insira logo antes do método index):
 
@@ -797,7 +797,7 @@ então vamos testar aquela nossa página de post... acesse http://localhost:3005
 
 Agora antes de prosseguir, vamos alterar nossa página index para que ela tenha um link para a página de login... edite o template da página index:
 
-    vim root/src/template/standard/index.tt2
+    $ vim root/src/template/standard/index.tt2
 
 e substitua o conteúdo com :
 
@@ -817,7 +817,7 @@ Então, vamos digitar uma senha dos usuários que criamos... se você já não e
 
 crie um novo arquivo para a paginacao genérica
 
-    vim root/src/template/standard/pagination.tt2
+    $ vim root/src/template/standard/pagination.tt2
 
 e insira o conteúdo
 
@@ -849,7 +849,7 @@ e insira o conteúdo
 
 e antes de criar um post, vamos alterar o template post_index.tt2
 
-    vim root/src/template/standard/post_index.tt2 
+    $ vim root/src/template/standard/post_index.tt2 
 
 e substitua todo o conteúdo com:
 
@@ -877,7 +877,7 @@ e substitua todo o conteúdo com:
 
 agora crie o template post_edit.tt2 para criar nossos posts..
 
-    vim root/src/template/standard/post_edit.tt2
+    $ vim root/src/template/standard/post_edit.tt2
     
 e insira o conteúdo:
 
@@ -888,7 +888,7 @@ e insira o conteúdo:
 
 e vamos alterar o controller ControlPanel::Post para que ele utilize os dados do usuário que estamos logados e salve no banco, então edite o controller ControlPanel::Post
 
-    vim lib/Blog/Tutorial/Controller/ControlPanel/Post.pm
+    $ vim lib/Blog/Tutorial/Controller/ControlPanel/Post.pm
 
 e substitua todo o conteúdo por:
 *** ATENÇÃO, retire os espaços no começo de cada linha... em especial a linha que começa com HTMLCONFIRM
