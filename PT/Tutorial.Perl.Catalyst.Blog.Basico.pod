@@ -583,9 +583,9 @@ e da mesma maneira inclúa o relacionamento no model posts.. caso ele não exist
     1;
 
 
-bom, agora já especificamos os relacionamentos de nossos models... quando vc utiliza postgres ele detecta os relacionamentos automaticamente.. exceto os many to many porque na verdade não many-to-many não é relacionamento.
+bom, agora já especificamos os relacionamentos de nossos models... quando vc utiliza postgres ele detecta os relacionamentos automaticamente.. exceto os many to many porque na verdade many-to-many não é relacionamento.
 
-=head2 Autenticando o usuário 
+=head2 AUTENTICANDO O USUÁRIO 
 
 Agora o próximo passo é criar umas telas/templates para login e os controllers respectivos que auxiliarão no login e logout
 
@@ -597,7 +597,8 @@ e adicione o conteúdo:
 
     faça login para acessar áreas restritas em nosso site:
     <br><br>
-    [% form.render %]                                                                                                                                                                                                                              
+    [% form.render %]
+
 agora crie o controller para autenticação
 
     script/blog_tutorial_create.pl controller Authenticate
