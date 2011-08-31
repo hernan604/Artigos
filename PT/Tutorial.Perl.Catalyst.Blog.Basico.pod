@@ -125,6 +125,8 @@ agora, vamos criar um controller chamado ControlPanel::Post que vai permitir a c
     script/blog_tutorial_create.pl controller ControlPanel::Post #o catalyst irá criar o esqueleto do controller para nos
     vim lib/Blog/Tutorial/Controller/ControlPanel/Post.pm
 
+=head2 CRIANDO FORMULÁRIO COM FORMHANDLER
+
 agora altere o método index do controller Post para:
 
     sub index : Path( '/post' ) : CaptureArgs(1) {
@@ -399,7 +401,7 @@ e inserir uma linha antes do [% content %], obtendo:
         [% content %]
     </div>
 
-agora acesse sua página inicial em http://localhost:3005/ e veja o cabeçalho da página ali... observe que suas páginas static podem ficar dentro do diretório /static/images... 
+agora acesse sua página inicial em http://localhost:3005/ e veja o cabeçalho da página ali... observe que suas imagens, js, ou páginas static podem ficar dentro do diretório /static/images... 
 
 agora altere o conteúdo completo da sua página index, para criar um link que vai até a página de posts:
 
@@ -422,7 +424,9 @@ Acesse sua página index e veja como ela está..
 
 ok, legal... mas e como fazemos para salvar estes posts como se fosse uma aplicação real utilizando banco de dados ?
 
-vamos criar então duas tabelas em qualquer banco de dados... vou demonstrar utilizando postgres ( a vantagem ao utilizar postgres com catalyst é que ele já detecta os relacionamentos):
+vamos criar então algumas tabelas em qualquer banco de dados... vou demonstrar utilizando postgres ( a vantagem ao utilizar postgres com catalyst é que ele já detecta os relacionamentos):
+
+=head2 ACESSO A BANCO DE DADOS COM PERL CATALYST E DBIX CLASS
 
 O nome do banco de dados será: 'blog_tutorial'
 
@@ -484,7 +488,14 @@ e vamos criar alguns usuários
 e agora vamos criar nossos models para nossa app.. vamos utilizar o dbic dump ( mais info DBIx::Class::Schema::Loader )
 
     cd Blog-Tutorial
-    script/blog_tutorial_create.pl model DB DBIC::Schema Blog::Tutorial::DB create=static dbi:Pg:dbname=blog_tutorial webdev passworrrddzz
+
+se você usa postgres com usuario MEU_USER.. substitua pelo seu username
+
+    script/blog_tutorial_create.pl model DB DBIC::Schema Blog::Tutorial::DB create=static dbi:Pg:dbname=blog_tutorial MEU_USER passworrrddzz
+
+se você usa mysql com usuario MEU_USER.. substitua pelo seu username
+
+    script/blog_tutorial_create.pl model DB DBIC::Schema Blog::Tutorial::DB create=static dbi:mysql:db=blog_tutorial MEU_USER passworrrddzz
   
 e agora vamos fixar os relacionamentos.... edite seus models e altere conforme:
 
