@@ -12,6 +12,8 @@ Vou demonstrar como criar um "blog/crud" simples com catalyst.
 
 =head2 INICIALIZAÇÃO DO PROJETO 
 
+Antes de iniciar, instale o catalyst e alguns módulos que utilzaremos através do cpanm Task::Catalyst HTML::FormHandler::Model::DBIC 
+
 Para iniciar nosso projeto, digite:
 
     $ catalyst.pl Blog::Tutorial
