@@ -4,7 +4,7 @@ RESUMO
 
 Neste tutorial você vai aprender como criar uma aplicação em perl catalyst.
 
-Vou demonstrar como criar um blog simples com catalyst.
+Vou demonstrar como criar um "blog/crud" simples com catalyst.
 
 
 INICIALIZAÇÃO DO PROJETO 
@@ -837,7 +837,12 @@ e substitua todo o conteúdo com:
     <br>
 
     [% WHILE ( item = results.next ) %]
-        id: [% item.id %], <a href="[% c.uri_for(c.controller( 'ControlPanel::Post' ).action_for( 'remove' ), item.id ) %]">remover</a> <br>
+        id: [% item.id %], 
+            <a href="[% c.uri_for(c.controller( 'ControlPanel::Post' ).action_for( 'remove' ), item.id ) %]">
+              remover</a> | 
+            <a href="[% c.uri_for(c.controller( 'ControlPanel::Post' ).action_for( 'edit' ), item.id ) %]">
+              alterar</a> 
+        <br>
         Titulo: [% item.titulo %] <br>
         Mensagem: [% item.mensagem %] <br>
     <br>-----------<br>
@@ -852,7 +857,7 @@ e vamos alterar o controller ControlPanel::Post para que ele utilize os dados do
 
 e substitua todo o conteúdo por:
 
-    package Blog::Tutorial::Controller::ControlPanel::Post;
+    package Blog::Tutorial::Controller::ControlPanel::Post;                                                                                                                                                                                        
     use Moose;
     use HTML::FormHandler::Model::DBIC;
     use namespace::autoclean;
@@ -880,12 +885,12 @@ e substitua todo o conteúdo por:
     sub index : Path( '/post' ) : CaptureArgs(1) {
         my ( $self, $c, $page ) = @_;
 
-        my $results = $c->model( __PACKAGE__->config->{schema_model} )->search(                                                                                                                                                                    
+        my $results = $c->model( __PACKAGE__->config->{schema_model} )->search(
             {
-
+    #todos 
             },
-            {
-                rows     => 5,
+            {  
+                rows     => 2,
                 page     => $c->req->params->{page} || 1,
                 order_by => { -asc => [qw/id/] }
             }
@@ -927,7 +932,25 @@ e substitua todo o conteúdo por:
             template     => 'post_edit.tt2',
             page_title   => 'Página de POSTS',
         );
+
+        my $obj;
+        if ( defined $id ) {
+
+            #carrega o post que está sendo alterado
+            $obj =
+              $c->model( __PACKAGE__->config->{schema_model} )
+              ->find( { id => $id, } );
+        }
+        else {
+
+            #cria um novo post
+            $obj =
+              $c->model( __PACKAGE__->config->{schema_model} )
+              ->new( { user_id => $c->user->id, } );
+        }
+
         my $form = HTML::FormHandler::Model::DBIC->new(
+            item       => $obj,
             field_list => [
                 titulo => {
                     type             => 'Text',
@@ -950,35 +973,22 @@ e substitua todo o conteúdo por:
             ]
         );
 
-        my $obj;
-        if ( defined $id ) {
-
-            #carrega o post que está sendo alterado
-            $obj =
-              $c->model( __PACKAGE__->config->{schema_model} )
-              ->find( { id => $id, } );
-        }
-        else {
-
-            #cria um novo post
-            $obj =
-              $c->model( __PACKAGE__->config->{schema_model} )
-              ->new( { user_id => $c->user->id, } );
-        }
-
         if ( $c->req->method eq 'POST' ) {
-            $form->process( item => $obj, params => $c->req->params );
+            $form->process( params => $c->req->params );
         }
 
         $c->stash( form => $form );
         return unless $form->validated;
         $c->flash( message => 'Post criado com sucesso', );
         $c->res->redirect(
-            $c->controller('ControlPanel::Post')->action_for('index') );
+            $c->uri_for(
+                $c->controller('ControlPanel::Post')->action_for('index')
+            )
+        );
     }
 
-    sub remove : Path( '/post/remove' ) : Args(1) {
-        my ( $self, $c, $id ) = @_;
+    sub remove : Path( '/post/remove' ) : CaptureArgs(2) {
+        my ( $self, $c, $id, $confirm ) = @_;
         my $item =
           $c->model( __PACKAGE__->config->{schema_model} )->find( { id => $id, } );
         $c->stash( current_view => 'Standard', );
@@ -986,13 +996,43 @@ e substitua todo o conteúdo por:
             $c->stash( template => \'Não foi possível remover', );
         }
         else {
-            $item->delete;
-            my $msg_removido =
-              'Removido. <a href="'
-              . $c->uri_for(
-                $c->controller('ControlPanel::Post')->action_for('index') )
-              . '">VOLTAR</a>';
-            $c->stash( template => \$msg_removido );
+
+            if ( !$confirm ) {
+                my $url_confirm =
+                  $c->uri_for(
+                    $c->controller('ControlPanel::Post')->action_for('remove'),
+                    $id, 'confirma' );
+                $c->stash(
+                    template => \<<HTMLCONFIRM
+    Certeza que deseja remover ?
+    <a href="$url_confirm">CONFIRMAR</a>
+    HTMLCONFIRM
+                );
+            }
+            else {
+                $item->delete;
+                my $msg_removido =
+                  'Removido. <a href="'
+                  . $c->uri_for(
+                    $c->controller('ControlPanel::Post')->action_for('index') )
+                  . '">VOLTAR</a>';
+                $c->stash( template => \$msg_removido );
+            }
         }
     }
+
+    =head1 AUTHOR
+
+    A clever guy
+
+    =head1 LICENSE
+
+    This library is free software. You can redistribute it and/or modify
+    it under the same terms as Perl itself.
+
+    =cut
+
+    __PACKAGE__->meta->make_immutable;
+
+    1;
 
