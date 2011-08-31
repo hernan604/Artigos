@@ -607,7 +607,9 @@ e edite o controller
 
     vim lib/Blog/Tutorial/Controller/Authenticate.pm
 
-remova o método index e adicione dois novos métodos: 'login' e 'logout'... ficando com um arquivo assim:
+Altere o conteúdo desse controller pelo conteúdo abaixo... na verdade apenas removi o método index e adicione dois novos métodos: 'login' e 'logout'... ficando com um arquivo assim:
+
+*** Importante: remova os espaços em branco no começo de cada linha... especialmente na linha que começa com DIV
 
     package Blog::Tutorial::Controller::Authenticate;
     use Moose;
@@ -756,7 +758,7 @@ e agora altere o método auto do seu Root controller... o método auto é execut
 
     vim lib/Blog/Tutorial/Controller/Root.pm
 
-e insira o método 'auto' que provavelmente não estará lá por padrão:
+e insira o método 'auto' que provavelmente não estará lá por padrão (insira logo antes do método index):
 
     sub auto : Private {
         my ( $self, $c ) = @_;
@@ -845,7 +847,7 @@ e insira o conteúdo
     [% END %]
 
 
- e antes de criar um post, vamos alterar o template post_index.tt2
+e antes de criar um post, vamos alterar o template post_index.tt2
 
     vim root/src/template/standard/post_index.tt2 
 
@@ -873,11 +875,23 @@ e substitua todo o conteúdo com:
     [% PROCESS 'pagination.tt2' %]
 
 
+agora crie o template post_edit.tt2 para criar nossos posts..
+
+    vim root/src/template/standard/post_edit.tt2
+    
+e insira o conteúdo:
+
+    POSTS<br>                                                                                                                                                                                                                                      
+    [% form.render %]
+
+
+
 e vamos alterar o controller ControlPanel::Post para que ele utilize os dados do usuário que estamos logados e salve no banco, então edite o controller ControlPanel::Post
 
     vim lib/Blog/Tutorial/Controller/ControlPanel/Post.pm
 
 e substitua todo o conteúdo por:
+*** ATENÇÃO, retire os espaços no começo de cada linha... em especial a linha que começa com HTMLCONFIRM
 
     package Blog::Tutorial::Controller::ControlPanel::Post;                                                                                                                                                                                        
     use Moose;
@@ -1057,4 +1071,34 @@ e substitua todo o conteúdo por:
     __PACKAGE__->meta->make_immutable;
 
     1;
+
+
+Agora acesse a página de posts novamente http://localhost:3005/post  , e crie, altere e remova alguns posts...
+
+=head2 CONCLUSÃO
+
+Bom pessoal, o basicão do catalyst é isso.. sugiro ir mais a fundo sobre :Chained, Catalyst::Dispatcher (forward, detach, etc) e leiam o tutorial oficial do catalyst.. é a melhor fonte de informação.. está em inglês mas quem sabe o google translator não traduza bem as partes que não são código..
+
+=head2 Autor
+
+Hernan Lopes < hernanlopes at gmail >
+
+cpan: http://search.cpan.org/~hernan/
+
+github:  http://github.com/hernan604/
+
+Repasse este conhecimento e ajude a fortalecer linguagem perl no brasil.
+
+=head2 Apêndice
+
+Veja também: 
+
+http://search.cpan.org/~bobtfish/Catalyst-Manual-5.9000/lib/Catalyst/Manual/Tutorial/01_Intro.pod
+
+http://search.cpan.org/~abraxxa/DBIx-Class-0.08195/lib/DBIx/Class.pm
+
+http://template-toolkit.org/
+
+http://search.cpan.org/dist/HTML-FormHandler/lib/HTML/FormHandler.pm
+
 
