@@ -2,7 +2,7 @@
 
 =encoding utf8
 
-=head1 TUTORIAL PERL CATALYST - COMO CRIAR UM BLOG BASICO
+=head1 TUTORIAL PERL CATALYST - COMO CRIAR UM BLOG/CRUD BASICO
 
 =head2 RESUMO
 
@@ -95,7 +95,7 @@ agora  vamos criar o template inicial para nossa página index:
 
 e insira o conteúdo:
 
-    BEM VINDO AO '[% tutulo_blog %]'
+    BEM VINDO AO '[% titulo_blog %]'
     <br><br>
     Aqui poderá encontrar como criar suas páginas com este framework
     <br>  
@@ -103,6 +103,9 @@ e insira o conteúdo:
 agora, altere e indique qual template o método index no controller Root deverá utilizar... 
 
     vim lib/Blog/Tutorial/Controller/Root.pm
+
+e altere o método index
+
     sub index :Path :Args(0) {
         my ( $self, $c ) = @_;
         $c->stash(
@@ -253,6 +256,10 @@ ok, entendi, mas e como eu acesso o valor dessas variáveis no controller?
 
 todas as variáveis de um request são acessíveis através do $c->req->params (veja mais em http://search.cpan.org/~bobtfish/Catalyst-Runtime-5.90002/lib/Catalyst/Request.pm#$req-%3Eparams )
 Então nós podemos alterar nosso método 'index' do controller 'post' para entender um pouco melhor isso... então, altere seu controller e insira umas linhas de debug para ver o que acontece conforme:
+
+    vim lib/Blog/Tutorial/Controller/ControlPanel/Post.pm
+
+e modifique o método index
 
     sub index : Path( '/post' ) : CaptureArgs(1) {
         my ( $self, $c, $page ) = @_;
