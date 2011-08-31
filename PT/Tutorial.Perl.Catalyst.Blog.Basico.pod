@@ -1,13 +1,16 @@
-TUTORIAL PERL CATALYST - COMO CRIAR UM BLOG BASICO
+=pod
 
-RESUMO
+=encoding utf8
+
+=head1 TUTORIAL PERL CATALYST - COMO CRIAR UM BLOG BASICO
+
+=head2 RESUMO
 
 Neste tutorial você vai aprender como criar uma aplicação em perl catalyst.
 
 Vou demonstrar como criar um "blog/crud" simples com catalyst.
 
-
-INICIALIZAÇÃO DO PROJETO 
+=head2 INICIALIZAÇÃO DO PROJETO 
 
 Para iniciar nosso projeto, digite:
 
