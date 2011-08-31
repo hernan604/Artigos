@@ -871,6 +871,7 @@ e substitua todo o conteúdo com:
         <br>
         Titulo: [% item.titulo %] <br>
         Mensagem: [% item.mensagem %] <br>
+        Por: [% item.user.email %] <br>
     <br>-----------<br>
     [% END %]
 
