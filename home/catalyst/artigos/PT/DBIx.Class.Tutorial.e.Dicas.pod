@@ -6,116 +6,116 @@
 
 =head2 Resumo
 
-Neste artigo, dou várias dicas de como fazer determinadas coisas com dbix class. Este não vai ser fácil para iniciantes que não leram a documentação. 
-No entanto, espero que sirva como referência.
+    Neste artigo, dou várias dicas de como fazer determinadas coisas com dbix class. Este não vai ser fácil para iniciantes que não leram a documentação. 
+    No entanto, espero que sirva como referência.
 
 
 =head2 A. Como gerar os models se você já tem o banco de dados, com catalyst:
-  $ script/myapp_create.pl model DB DBIC::Schema MyApp::DB create=static dbi:Pg:dbname=myapp USER pass
-  $ script/myapp_create.pl model DB DBIC::Schema MyApp::DB create=static dbi:mysql:db=myapp USER pass
+    $ script/myapp_create.pl model DB DBIC::Schema MyApp::DB create=static dbi:Pg:dbname=myapp USER pass
+    $ script/myapp_create.pl model DB DBIC::Schema MyApp::DB create=static dbi:mysql:db=myapp USER pass
 
 =head2 B. Como gerar os models se você já tem o banco de dados, sem catalyst:
-   dbicdump -o dump_directory=./lib \
-   -o components='["InflateColumn::DateTime"]' \   <-- *** nao obrigatorio
-   -o debug=1 \
-   My::Schema \
-   'dbi:Pg:dbname=foo' \
-    myuser \
-   mypassword
+    dbicdump -o dump_directory=./lib \
+    -o components='["InflateColumn::DateTime"]' \   <-- *** nao obrigatorio
+    -o debug=1 \
+    My::Schema \
+    'dbi:Pg:dbname=foo' \
+     myuser \
+    mypassword
 
 =head2 C. Ex de script simplão (p/ executar via console) com dbix class (sem catalsyt):
 
-   1. fazer um schema dump com dbix class schema loader (letra B)
-    2. colocar seu projeto em pastas assim:
-   /myapp
-   /myapp/programa.pl
-   /myapp/lib
-   /myapp/lib/DBSchema
-   
-   3.editar seu programa.pl e adicionar estas linhas para ele poder utilizar o DBSchema:
-    use lib ( "./lib" );
-   use DBSchema;  
-   my $schema = DBSchema->connect('dbi:Pg:dbname=saude', 'hernan', '123');
-   my $medico = $schema->resultset('Medico')->find({ id => 1});
+    1. fazer um schema dump com dbix class schema loader (letra B)
+     2. colocar seu projeto em pastas assim:
+    /myapp
+    /myapp/programa.pl
+    /myapp/lib
+    /myapp/lib/DBSchema
+
+    3.editar seu programa.pl e adicionar estas linhas para ele poder utilizar o DBSchema:
+     use lib ( "./lib" );
+    use DBSchema;  
+    my $schema = DBSchema->connect('dbi:Pg:dbname=saude', 'hernan', '123');
+    my $medico = $schema->resultset('Medico')->find({ id => 1});
     print $medico->name;
 
 =head2 D. Exemplo de cache direto no dbix class:
 
-   http://search.cpan.org/~rkitover/Catalyst-Model-DBIC-Schema-0.41/lib/Catalyst/TraitFor/Model/DBIC/Schema/Caching.pm
+    http://search.cpan.org/~rkitover/Catalyst-Model-DBIC-Schema-0.41/lib/Catalyst/TraitFor/Model/DBIC/Schema/Caching.pm
 
-   __PACKAGE__->config({
-   traits => ['Caching'],
-   connect_info => 
-   ['dbi:mysql:db', 'user', 'pass'],
-   });
+    __PACKAGE__->config({
+    traits => ['Caching'],
+    connect_info => 
+    ['dbi:mysql:db', 'user', 'pass'],
+    });
 
-   $c->model('DB::Table')->search({ foo => 'bar' }, { cache_for => 18000 });  
+    $c->model('DB::Table')->search({ foo => 'bar' }, { cache_for => 18000 });  
 
 
 =head2 E. Exemplo de ResultSet (extendendo os models), nos permite jogar todas as lógicas nos models, gerando thin controllers fat models.
-   Depois é só acessar como se fosse um metodo.
-   infos: http://beta.metacpan.org/module/Catalyst::Model::DBIxResultSet
+    Depois é só acessar como se fosse um metodo.
+    infos: http://beta.metacpan.org/module/Catalyst::Model::DBIxResultSet
 
-   sub is_my_img {
-   my ($self, $c, $img_gallery_id) = @_;
-    return $self->search({
-   id => $img_gallery_id,
-   user_id => $c->user->id,
-   });
+    sub is_my_img {
+    my ($self, $c, $img_gallery_id) = @_;
+     return $self->search({
+    id => $img_gallery_id,
+    user_id => $c->user->id,
+    });
 
-   No controller:
-   my $test = $c->model('DBICSchemamodel::ImgGallery')->is_my_img($c, $pks[0])->single();
+    No controller:
+    my $test = $c->model('DBICSchemamodel::ImgGallery')->is_my_img($c, $pks[0])->single();
 
 
 =head2 F. Deploy de banco de dados, Tendo os models em mãos, é possível criar as tabelas (após conectar) num banco de dados:
-   $schema->deploy
+    $schema->deploy
 
 =head2 G. Exemplo de coluna Count 
-   dbic dbix class count 
-   search({}, {
-   order_by => { -desc => \'count(tracks.trackid)' },
-   join => 'tracks',
-   distinct => 1,
-   });  
+    dbic dbix class count 
+    search({}, {
+    order_by => { -desc => \'count(tracks.trackid)' },
+    join => 'tracks',
+    distinct => 1,
+    });  
 
 =head2 H.  Custom Query
-   my $schema = DB->connect(...);
-   my $stmt = 'create table foo ( id int );';
-   $schema->storage->dbh->prepare( $stmt )->execute()
+    my $schema = DB->connect(...);
+    my $stmt = 'create table foo ( id int );';
+    $schema->storage->dbh->prepare( $stmt )->execute()
 
 =head2 I. Exemplo HashReinflator (hashreinflator devolve um hash ao inves de um resultset), com cache:   
 
-   my $uniqueKey = md5_hex($schemamodel);
-   my $cached_data;
-   unless ( $cached_data = $c->cache->get($uniqueKey) ) {
-   my $result = $c->model($schemamodel)
-    ->search({
-     is_deleted => 0, 
-    },{
-    });
-    $result->result_class('DBIx::Class::ResultClass::HashRefInflator'); #sets the result to be hashreinflator
-    my @items_list = $result->all; #inflates the whole resultset into a array hash
-     use Data::Dumper;
-    $c->log->debug('Dumper ' . Dumper( \@items_list )); 
-    $cached_data = \@items_list;
-    $c->cache->set( $uniqueKey, $cached_data );
-   }
+    my $uniqueKey = md5_hex($schemamodel);
+    my $cached_data;
+    unless ( $cached_data = $c->cache->get($uniqueKey) ) {
+    my $result = $c->model($schemamodel)
+     ->search({
+      is_deleted => 0, 
+     },{
+     });
+     $result->result_class('DBIx::Class::ResultClass::HashRefInflator'); #sets the result to be hashreinflator
+     my @items_list = $result->all; #inflates the whole resultset into a array hash
+      use Data::Dumper;
+     $c->log->debug('Dumper ' . Dumper( \@items_list )); 
+     $cached_data = \@items_list;
+     $c->cache->set( $uniqueKey, $cached_data );
+    }
 
 =head2 J. Insert multiplo:
-   $cd->artistname(shift @{$c->req->params->{artistname}});  
+    $cd->artistname(shift @{$c->req->params->{artistname}});  
     $cd->update(); 
 
 =head2 K. Adicionando um  metodo (no model/resultset) que retorna preço formatado
-   $cd->artistname(shift @{$c->req->params->{artistname}});  
+    $cd->artistname(shift @{$c->req->params->{artistname}});  
     $cd->update(); 
 
 =head2 L. DBIx::Class search NOT IN, -not_in, not in
 
-  ->search({... 
-  id => { 
-   'not in' => [1,2], 
-   },
-  ...},{}); 
+    ->search({... 
+    id => { 
+     'not in' => [1,2], 
+     },
+    ...},{}); 
 
 
 =head2 M. Order by count 
@@ -127,40 +127,40 @@ No entanto, espero que sirva como referência.
 
 =head2 O.  Exemplo de um ResultSet Class para o model Company   
     package myapp::DBSchema::ResultSet::Company;
-   use strict;
-   use warnings;
-   use base 'DBIx::Class::ResultSet';
+    use strict;
+    use warnings;
+    use base 'DBIx::Class::ResultSet';
 
-   sub all_companys {
-   my ($self) = @_;
-   my @companys = $self->
-    search( { 'me.is_deleted' => 0 }, { order_by => ['me.name ASC',] } )->all;
-   return @companys;
-   }
+    sub all_companys {
+    my ($self) = @_;
+    my @companys = $self->
+     search( { 'me.is_deleted' => 0 }, { order_by => ['me.name ASC',] } )->all;
+    return @companys;
+    }
 
-   1;  
+    1;  
 
 =head2 P. **** ATive o trace do dbix class para debugar as querys, etc...
-   sem cores:
-      $ export DBIC_TRACE=1 && script/imobiliaria_software_server.pl -r -d -p 3089
-   com cores:
-      $ export DBIC_TRACE_PROFILE=console && export DBIC_TRACE=1 && script/imobiliaria_software_server.pl -r -d -p 3089
+    sem cores:
+       $ export DBIC_TRACE=1 && script/imobiliaria_software_server.pl -r -d -p 3089
+    com cores:
+       $ export DBIC_TRACE_PROFILE=console && export DBIC_TRACE=1 && script/imobiliaria_software_server.pl -r -d -p 3089
 
-Q. Query no dbix class:
-$item = $schema->resultset('Medico')->find(); #retorna uma row, pode ser acessado ex. 
+=head2 Q. Query no dbix class:
+    $item = $schema->resultset('Medico')->find(); #retorna uma row, pode ser acessado ex. 
     $item->id, 
     $item->nome, 
     $item->nome('novo nome') 
     $item->update
-@res = $schema->resultset('Medico')->search({},{})->all #Retorna array
-$res = $schema->resultset('Medico')->search({...},{})  #Retorna varias rows e para fazer loop tem que fazer: while ( my $item = $res->next ) { ... } 
+    @res = $schema->resultset('Medico')->search({},{})->all #Retorna array
+    $res = $schema->resultset('Medico')->search({...},{})  #Retorna varias rows e para fazer loop tem que fazer: while ( my $item = $res->next ) { ... } 
 
 
 =head2 Autor
 
-Hernan Lopes < hernanlopes gmail >
+    Hernan Lopes < hernanlopes gmail >
 
-cpan: http://search.cpan.org/~hernan/
+    cpan: http://search.cpan.org/~hernan/
 
-github:  http://github.com/hernan604/
+    github:  http://github.com/hernan604/
 
