@@ -11,10 +11,12 @@
 
 
 =head2 A. Como gerar os models se você já tem o banco de dados, com catalyst:
+
     $ script/myapp_create.pl model DB DBIC::Schema MyApp::DB create=static dbi:Pg:dbname=myapp USER pass
     $ script/myapp_create.pl model DB DBIC::Schema MyApp::DB create=static dbi:mysql:db=myapp USER pass
 
 =head2 B. Como gerar os models se você já tem o banco de dados, sem catalyst:
+
     dbicdump -o dump_directory=./lib \
     -o components='["InflateColumn::DateTime"]' \   <-- *** nao obrigatorio
     -o debug=1 \
@@ -53,6 +55,7 @@
 
 
 =head2 E. Exemplo de ResultSet (extendendo os models), nos permite jogar todas as lógicas nos models, gerando thin controllers fat models.
+
     Depois é só acessar como se fosse um metodo.
     infos: http://beta.metacpan.org/module/Catalyst::Model::DBIxResultSet
 
@@ -68,9 +71,11 @@
 
 
 =head2 F. Deploy de banco de dados, Tendo os models em mãos, é possível criar as tabelas (após conectar) num banco de dados:
+
     $schema->deploy
 
 =head2 G. Exemplo de coluna Count 
+
     dbic dbix class count 
     search({}, {
     order_by => { -desc => \'count(tracks.trackid)' },
@@ -79,6 +84,7 @@
     });  
 
 =head2 H.  Custom Query
+
     my $schema = DB->connect(...);
     my $stmt = 'create table foo ( id int );';
     $schema->storage->dbh->prepare( $stmt )->execute()
@@ -102,10 +108,12 @@
     }
 
 =head2 J. Insert multiplo:
+
     $cd->artistname(shift @{$c->req->params->{artistname}});  
     $cd->update(); 
 
 =head2 K. Adicionando um  metodo (no model/resultset) que retorna preço formatado
+
     $cd->artistname(shift @{$c->req->params->{artistname}});  
     $cd->update(); 
 
@@ -117,15 +125,17 @@
      },
     ...},{}); 
 
-
 =head2 M. Order by count 
+
     order_by => \''COUNT(\'story_id\') AS count'
     order_by => \'COUNT(\'story_id\') DESC'
 
 =head2 N. update user session data 
+
     $c->user->obj->discard_changes
 
 =head2 O.  Exemplo de um ResultSet Class para o model Company   
+
     package myapp::DBSchema::ResultSet::Company;
     use strict;
     use warnings;
@@ -141,12 +151,14 @@
     1;  
 
 =head2 P. **** ATive o trace do dbix class para debugar as querys, etc...
+
     sem cores:
        $ export DBIC_TRACE=1 && script/imobiliaria_software_server.pl -r -d -p 3089
     com cores:
        $ export DBIC_TRACE_PROFILE=console && export DBIC_TRACE=1 && script/imobiliaria_software_server.pl -r -d -p 3089
 
 =head2 Q. Query no dbix class:
+
     $item = $schema->resultset('Medico')->find(); #retorna uma row, pode ser acessado ex. 
     $item->id, 
     $item->nome, 
@@ -154,7 +166,6 @@
     $item->update
     @res = $schema->resultset('Medico')->search({},{})->all #Retorna array
     $res = $schema->resultset('Medico')->search({...},{})  #Retorna varias rows e para fazer loop tem que fazer: while ( my $item = $res->next ) { ... } 
-
 
 =head2 Autor
 
